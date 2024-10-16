@@ -61,8 +61,21 @@ def read_code_from_file(file_path):
 # Inicializa el proyecto y obtén la ruta
 project_path, project_name = initialize_project()
 
-# Cargar el contenido de los archivos de la carpeta "golang_codes"
-main_code = read_code_from_file("golang_codes/main.txt")
+
+main_code =f"""
+package main
+
+import (
+    "{project_name.lower()}/internal/router"
+    "{project_name.lower()}/cmd/config"
+)
+
+func main() {{
+    r := router.SetupRouter()
+    r.Run(config.Port)
+}}
+"""
+
 config_code = read_code_from_file("golang_codes/config.txt")
 router_code = read_code_from_file("golang_codes/router.txt")
 urlmapping_code = read_code_from_file("golang_codes/urlmapping.txt")
