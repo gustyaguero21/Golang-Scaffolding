@@ -57,16 +57,84 @@ def create_dirs(directories_str,destination=None):
 
             create_file_in_dir(str(dir+".go"),f"package {dir}",new_dir)
 
+def edit_files(file_path, content):
+    # Escribe o sobrescribe el contenido en el archivo dado
+    with open(file_path, 'w') as file:
+        file.write(content)
+    
 
 
 project_path,project_name=initialize_project()
 
-create_file_in_dir("main.go","package main","cmd/api")
+main_code="""
+package main
 
-create_file_in_dir("config.go","package config","cmd/config")
+import (
+	"newapp/cmd/config"
+	"newapp/internal/router"
+)
+
+func main() {
+
+	router := router.SetupRouter()
+
+	router.Run(config.Port)
+}
+"""
+
+create_file_in_dir("main.go",main_code,"cmd/api")
+
+config_code="""
+package config
+
+//router params
+
+const (
+	Port = ":8080"
+)
+
+"""
+
+create_file_in_dir("config.go",config_code,"cmd/config")
 
 create_dirs("data,handlers,mock,models,router,services,utils","internal")
+
+router_code = """
+package router
+
+import "github.com/gin-gonic/gin"
+
+func SetupRouter() *gin.Engine {
+    router := gin.Default()
+
+    Urlmapping(router)
+
+    return router
+}
+"""
+
+urlmapping_code= """
+package router
+
+import "github.com/gin-gonic/gin"
+
+func Urlmapping(router *gin.Engine) {
+    api := router.Group("/api/v1")
+    api.GET("/ping", func(c *gin.Context) {
+        c.JSON(200, gin.H{
+            "message": "pong",
+        })
+    })
+}
+"""
+
+
+edit_files("internal/router/router.go", router_code)
+create_file_in_dir("urlmapping.go",urlmapping_code,"internal/router")
+
 
 create_dirs("pkg")
 
 create_file_in_dir("go.mod",f"module {project_name.lower()}")
+
+
