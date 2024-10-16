@@ -9,7 +9,6 @@ La estructura del proyecto que incluye este script es la siguiente:
 ```
 Golang-scaffolding/
 ├── golang_codes/
-│   ├── main.txt
 │   ├── config.txt
 │   ├── router.txt
 │   ├── urlmapping.txt
