@@ -1,0 +1,13 @@
+package main
+
+import (
+	"newapp/cmd/config"
+	"newapp/internal/router"
+)
+
+func main() {
+
+	router := router.SetupRouter()
+
+	router.Run(config.Port)
+}
