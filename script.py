@@ -22,9 +22,9 @@ def create_file_in_dir(file_name, file_content, file_destination=None):
     if file_destination is None:
         file_path = Path(file_name)
     else:
-        directories = Path(file_destination)
-        directories.mkdir(parents=True, exist_ok=True)
-        file_path = Path(directories / file_name)
+        destination = Path(file_destination)
+        destination.mkdir(parents=True, exist_ok=True)
+        file_path = Path(destination / file_name)
     
     with file_path.open("w") as write_file:
         write_file.write(file_content)
@@ -48,17 +48,14 @@ def create_dirs(directories_str, destination=None):
             create_file_in_dir(str(dir + ".go"), f"package {dir}", new_dir)
 
 def edit_files(file_path, content):
-    # Escribe o sobrescribe el contenido en el archivo dado
     with open(file_path, 'w') as file:
         file.write(content)
 
 def read_code_from_file(file_path):
-    # Aquí se utiliza la ruta relativa correcta
-    absolute_path = Path(__file__).parent / file_path  # Construye la ruta relativa
+    absolute_path = Path(__file__).parent / file_path 
     with open(absolute_path, "r") as file:
         return str(file.read())
 
-# Inicializa el proyecto y obtén la ruta
 project_path, project_name = initialize_project()
 
 
@@ -80,15 +77,12 @@ config_code = read_code_from_file("golang_codes/config.txt")
 router_code = read_code_from_file("golang_codes/router.txt")
 urlmapping_code = read_code_from_file("golang_codes/urlmapping.txt")
 
-# Crear los archivos correspondientes en las rutas especificadas
 create_file_in_dir("main.go", main_code, "cmd/api")
 create_file_in_dir("config.go", config_code, "cmd/config")
 create_dirs("data,handlers,mock,models,router,services,utils", "internal")
 
-# Editar archivos específicos
 edit_files("internal/router/router.go", router_code)
 create_file_in_dir("urlmapping.go", urlmapping_code, "internal/router")
 
-# Crear el archivo go.mod
 create_dirs("pkg")
 create_file_in_dir("go.mod", f"module {project_name.lower()}")
