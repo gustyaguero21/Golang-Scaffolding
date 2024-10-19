@@ -1,14 +1,17 @@
 import os
 from pathlib import Path
 
+import os
+from pathlib import Path
+
 def initialize_project():
-    project_name = str(input("Project name (use only names with '_'): "))
+    project_name = str(input("Project name (use only names with '_' or '-'): "))
     
-    while not (isinstance(project_name, str) and "_" in project_name):
+    while not (isinstance(project_name, str) and ('_' in project_name or '-' in project_name)):
         print("Invalid project name. Please try again.")
-        project_name = str(input("Project name (use only names with '_'): "))
-    
-    stripped_name = ''.join(word.capitalize() for word in project_name.split('_'))
+        project_name = str(input("Project name (use only names with '_' or '-'): "))
+
+    stripped_name = ''.join(word.capitalize() for word in project_name.replace('-', '_').split('_'))
 
     project_path = Path("../" + stripped_name)
 
@@ -17,6 +20,7 @@ def initialize_project():
     os.chdir(project_path)
 
     return project_path, stripped_name
+
 
 def create_file_in_dir(file_name, file_content, file_destination=None):
     if file_destination is None:
